@@ -21,13 +21,15 @@ def signal(tempo):
     if tempo_now >= tempo_max: return exit()
 
 def main():
-    a = b = x = y = 0
+    a, b, x, y = 0, 0, 0, 0
 
     while a == b or x == 0 or y == 0 or x == y:
         a = random.randint(5000, 100000)
         b = random.randint(5000, 100000)
         mcd, x, y = SuperSecretFunction(a, b)
-            
+
+    random.seed(y**x)
+
     sec = round(time.time())
 
     print(f"a = {a}\nb = {b}")
@@ -39,19 +41,15 @@ def main():
     signal(sec)
     if x1 != x or y1 != y: return log.critical("I valori x/y sono errati!")
     else: print("Corretto!\n\nOra dovrai indicarmi il valore delle variabili sotto indicate, sapendo come sono state calcolate nel codice.\n")
-        
 
-    p = q = e = i = j = w = 4
+    p, q, e = 4, 4, 4
 
-    while isPrime(p):
-        p = x * b + i
-        i+=1
-    while isPrime(q):
-        q = y * a + j
-        i+=1
-    while isPrime(e):
-        e = x * y + w
-        w+=1
+    while isPrime(p) == False:
+        p = random.randint(5000, 100000)
+    while isPrime(q) == False:
+        q = random.randint(5000, 100000)
+    while isPrime(e) == False:
+        e = random.randint(5000, 100000)
 
     n = p * q
     phi = (p - 1) * (q - 1)
@@ -73,7 +71,6 @@ def main():
     solve(flag_enc, n, phi, e, d, n1, phi1, e1, d1)
 
 if __name__ == "__main__":
-    random.seed(round(time.time()))
     try:
         main()
     except KeyboardInterrupt:
