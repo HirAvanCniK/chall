@@ -12,7 +12,7 @@ def solve(ct, realK, k, realIv, iv):
             cipher = AES.new(k, AES.MODE_CBC, iv)
             flag_dec = cipher.decrypt(ct)
             if flag_dec[:-2] == flag:
-                print("Complimenti ecco la tua flag:", flag)
+                print("Complimenti ecco la tua flag:", flag.decode())
             else:
                 Nope = int("Nope!")
         except:
