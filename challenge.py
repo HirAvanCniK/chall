@@ -1,15 +1,17 @@
 import random, time
 from secret import SuperSecretFunction, flag
 from pwn import log
-from Crypto.Util.number import isPrime, bytes_to_long, long_to_bytes
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
-def solve(ct, realN, realPhi, realE, realD, n, phi, e, d):
+def solve(ct, realK, k, realIv, iv):
         try:
-            if realN != n or realPhi != phi or realE != e or realD != d:
+            if realK != k or realIv != iv:
                 Nope = int("Nope!")
-            flag_dec = long_to_bytes(pow(ct, d, n))
-            if flag_dec == flag:
-                print("Complimenti ecco la tua flag:", flag_dec)
+            cipher = AES.new(k, AES.MODE_CBC, iv)
+            flag_dec = cipher.decrypt(ct)
+            if flag_dec[:-2] == flag:
+                print("Complimenti ecco la tua flag:", flag)
             else:
                 Nope = int("Nope!")
         except:
@@ -42,33 +44,19 @@ def main():
     if x1 != x or y1 != y: return log.critical("I valori x/y sono errati!")
     else: print("Corretto!\n\nOra dovrai indicarmi il valore delle variabili sotto indicate, sapendo come sono state calcolate nel codice.\n")
 
-    p, q, e = 4, 4, 4
+    key = random.randbytes(16)
+    iv = random.randbytes(16)
 
-    while isPrime(p) == False:
-        p = random.randint(5000, 100000)
-    while isPrime(q) == False:
-        q = random.randint(5000, 100000)
-    while isPrime(e) == False:
-        e = random.randint(5000, 100000)
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    flag_enc = cipher.encrypt(pad(flag, 16))
 
-    n = p * q
-    phi = (p - 1) * (q - 1)
-    d = pow(e, -1, phi)
-    flag_enc = pow(bytes_to_long(flag), e, n)
-
-    e1 = int(input("e?: "))
+    k = input("key? (esadecimale): ")
     signal(sec)
 
-    n1 = int(input("n?: "))
+    IV = input("iv? (esadecimale): ")
     signal(sec)
 
-    phi1 = int(input("phi?: "))
-    signal(sec)
-
-    d1 = int(input("d?: "))
-    signal(sec)
-
-    solve(flag_enc, n, phi, e, d, n1, phi1, e1, d1)
+    solve(flag_enc, key, bytes.fromhex(k), iv, bytes.fromhex(IV))
 
 if __name__ == "__main__":
     try:
