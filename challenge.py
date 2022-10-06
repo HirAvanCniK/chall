@@ -1,6 +1,6 @@
-import random, time
+import time
 from secret import SuperSecretFunction, flag
-from pwn import log
+from pwn import *
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 
