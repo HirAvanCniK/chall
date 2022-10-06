@@ -1,4 +1,5 @@
 import time
+from random import getrandbits
 from secret import SuperSecretFunction, flag
 from pwn import *
 from Crypto.Cipher import AES
@@ -44,8 +45,8 @@ def main():
     if x1 != x or y1 != y: return log.critical("I valori x/y sono errati!")
     else: print("Corretto!\n\nOra dovrai indicarmi il valore delle variabili sotto indicate, sapendo come sono state calcolate nel codice.\n")
 
-    key = random.randbytes(16)
-    iv = random.randbytes(16)
+    key = random.getrandbits(16 * 8).to_bytes(16, 'little')
+    iv = random.getrandbits(16 * 8).to_bytes(16, 'little')
 
     cipher = AES.new(key, AES.MODE_CBC, iv)
     flag_enc = cipher.encrypt(pad(flag, 16))
